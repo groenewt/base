@@ -10,3 +10,6 @@
 [submodule "forge/sbin"]
 	path = forge/sbin
 	url = https://github.com/groenewt/base_bin
+[submodule "external"]
+	path = external
+	url = https://github.com/groenewt/base_external
