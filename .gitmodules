@@ -4,3 +4,6 @@
 [submodule "forge/docs"]
 	path = forge/docs
 	url = https://github.com/groenewt/base_docs
+[submodule "forge/templates"]
+	path = forge/templates
+	url = https://github.com/groenewt/base_templates
