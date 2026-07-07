@@ -1,3 +1,6 @@
 [submodule "forge/core"]
 	path = forge/core
 	url = https://github.com/groenewt/core
+[submodule "forge/docs"]
+	path = forge/docs
+	url = https://github.com/groenewt/base_docs
