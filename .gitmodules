@@ -7,9 +7,12 @@
 [submodule "forge/templates"]
 	path = forge/templates
 	url = https://github.com/groenewt/base_templates
-[submodule "forge/sbin"]
-	path = forge/sbin
-	url = https://github.com/groenewt/base_bin
 [submodule "external"]
 	path = external
 	url = https://github.com/groenewt/base_external
+[submodule "forge/agents"]
+	path = forge/agents
+	url = https://github.com/groenewt/base_agents
+[submodule "forge/bin"]
+	path = forge/bin
+	url = https://github.com/groenewt/base_bin
