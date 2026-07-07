@@ -1,0 +1,3 @@
+[submodule "forge/core"]
+	path = forge/core
+	url = https://github.com/groenewt/core
