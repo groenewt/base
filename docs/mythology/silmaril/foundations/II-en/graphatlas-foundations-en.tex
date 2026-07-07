@@ -1,0 +1,324 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathpazo}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{tikz-cd}
+\usepackage[margin=1.15in]{geometry}
+\usepackage{xcolor}
+\definecolor{silmaril}{RGB}{28,60,92}
+\definecolor{dionysus}{RGB}{112,32,60}
+\usepackage[colorlinks=true,linkcolor=silmaril,citecolor=silmaril]{hyperref}
+\usepackage{enumitem}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{scholium}[theorem]{Scholium}
+\newtheorem*{interlude}{Interlude}
+
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\Set}{\mathbf{Set}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\Nat}{\operatorname{Nat}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\ev}{\operatorname{ev}}
+\newcommand{\El}{\textstyle\int}
+\newcommand{\colim}{\operatorname{colim}}
+
+\newcommand{\act}[2]{\section{#1 \\ {\normalsize\normalfont\itshape #2}}}
+
+\title{\color{silmaril}\textbf{Identity Is the Totality of Arrows}\\[0.6ex]
+\large The Mathematical Foundations of GraphAtlas,\\
+Told as the History of Philosophy and Algebra\\[0.4ex]
+\normalsize Silmaril Foundations Series}
+\author{GraphAtlas / Silmaril}
+\date{2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent Every knowledge system embeds an answer to the oldest question in philosophy: \emph{what is a thing?} Most systems answer it silently and badly, inheriting substance metaphysics --- the doctrine that a thing possesses a hidden essence beneath its relations --- and then building opaque architectures to guard that essence. This document tells the twenty-five-century story of how that doctrine was raised, besieged, and finally overturned by theorems, and shows that GraphAtlas is not a system that \emph{has} a philosophy but a system whose architecture \emph{follows from} the theorems. The narrative is staged as a tragedy in the classical sense: substance metaphysics is the protagonist, its hamartia is the belief in the hidden essence, the \emph{anagnorisis} is the Yoneda lemma, the \emph{peripeteia} is Lambek's fixed point, and the exodos is a federated, inspectable knowledge graph. Full proofs are given for the Yoneda lemma, the density theorem, Lambek's theorem, and Lawvere's fixed-point theorem; Ad\'amek's construction and the Turi--Plotkin bialgebraic synthesis are stated with proof sketches.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\act{Prologos: The Question}{In which the oldest problem in philosophy is posed, and revealed to be a systems-design problem}
+
+Before there was algebra there was a quarrel. Heraclitus said that everything flows, that a thing is the process of its transformations, that you cannot step into the same river twice because the river \emph{is} its flowing. Parmenides answered that what truly is cannot change at all --- that beneath the shifting appearances there must be something that simply, statically, \emph{is}. Western metaphysics is the long echo of Parmenides winning that argument.
+
+The victory was codified by Aristotle. In the \emph{Categories} --- and the irony of that title will take two millennia to detonate --- he sorted the ways of being into a hierarchy. At the summit: \emph{ousia}, substance, the underlying subject (\emph{hypokeimenon}) of which everything else is predicated but which is itself predicated of nothing. Near the bottom, among the thinnest and most derivative modes of being: \emph{pros ti} --- ``toward something'' --- relation. A relation, for Aristotle, is an accident that inheres in a substance; the substance could in principle exist without it. Socrates is what he is \emph{first}, and only afterwards, incidentally, is he shorter than Simmias.
+
+Hold that claim up to the light, because it is the hamartia of the entire tradition: \textbf{the thing is prior to its relations; the relations are decoration on an essence that could stand alone.} Every opaque database, every proprietary ontology, every system that stores a ``true identity'' in a locked column and treats the visible edges as mere metadata, is running twenty-four-hundred-year-old Aristotelian firmware. The question this document answers with proofs rather than opinions is: \emph{was Aristotle right?}
+
+The answer is no, and the refutation is a bijection.
+
+\act{Act I: The Long Siege}{In which relation, the lowest category of being, begins its slow ascent}
+
+The medieval schools fought the problem of universals --- do general natures exist in things (\emph{realism}), or are they names we impose (\emph{nominalism})? --- and Ockham's razor cut in favor of the names. But notice what nominalism concedes even in victory: it still assumes the individual, the bare particular, as the bedrock. It economizes on essences without questioning the substance underneath. The siege engine that would actually breach the wall was built by a rationalist with a taste for infinitesimals.
+
+Leibniz proposed the \emph{identity of indiscernibles}: two entities that agree in all their predicates are one entity.
+\[
+A = B \quad\Longleftrightarrow\quad \forall P\,\bigl(P(A) \leftrightarrow P(B)\bigr).
+\]
+Read carefully, this is a demotion of substance smuggled in as a principle of logic. If identity is \emph{exhausted} by predicates --- by how the thing shows up to every possible probe --- then the hidden substrate does no work. Leibniz flinched from his own conclusion (relations, he said, are \emph{ideal}, grounded in the monads' internal states), but the formula stood, waiting for a mathematics precise enough to vindicate it. It would wait two hundred and fifty years, and when vindication came, the universally quantified predicates $P$ would be replaced by morphisms, and the biconditional would sharpen into a natural isomorphism.
+
+Kant made the concession structural. The \emph{Ding an sich} --- the thing in itself, substance in its purest form --- is by his own argument \emph{unknowable}; all that is ever given to us is the phenomenon, the thing-as-it-relates to a possible experience. Substance survives in Kant only as a blank posit beyond every possible observation. A posit beyond every possible observation is a posit that no theorem, no query, and no audit will ever need. The wall had not fallen, but the defenders had retreated to a keep with no windows, and were calling the blindness a fortification.
+
+\act{Act II: Algebra Learns to Forget}{In which mathematics stops asking what things are and starts asking how they map}
+
+While philosophy besieged substance from without, algebra was tunneling under it from within --- by learning, in three great acts of renunciation, to \emph{forget} the inner nature of its objects.
+
+\emph{Galois} (1832) forgot the roots. To decide whether a quintic is solvable you do not inspect the roots themselves --- you inspect the \emph{symmetry group} of their relationships, the ways they can be exchanged while preserving every algebraic truth. The individual root became irrelevant; the structure of permutations became everything. This is the first time in history that a hard question about \emph{objects} was answered entirely by a soft question about \emph{arrows}.
+
+\emph{Noether} (1920s) forgot the elements. Her rings and modules are studied not by calculating inside them but through chain conditions, ideals, and homomorphisms --- properties of the map lattice, not of the members. Her school's slogan, transmitted through van der Waerden's \emph{Moderne Algebra}, might be paraphrased: \emph{do not look at the elements; look at what the structure does}. And her physics theorem carries the same signature: conservation laws are not properties of stuff but shadows of symmetry --- invariants of transformation, being as what survives the arrows.
+
+\emph{Eilenberg and Mac Lane} (1945) forgot the structures themselves. To make precise the working topologist's phrase ``this isomorphism is natural,'' they were forced to invent three nested definitions --- category, functor, natural transformation --- in which the objects are deliberately opaque tokens and \emph{all mathematical content lives in the arrows and their composition}. They named it ``category theory'' in a pointed act of theft: Aristotle's word for the taxonomy of substances, reassigned to a mathematics with no substances at all. The stage is set; the recognition scene can begin.
+
+\begin{definition}[Category, locally small]
+A category $\C$ consists of objects, arrows $f\colon A \to B$, an associative composition, and identities $\id_A$. It is \emph{locally small} when each collection $\Hom_\C(A,B)$ is a set.
+\end{definition}
+
+\begin{definition}[Presheaf; representable]
+A \emph{presheaf} on $\C$ is a functor $F\colon \C^{\op} \to \Set$. Each object $A$ induces the representable presheaf
+\[
+h_A := \Hom_\C(-,A)\colon \C^{\op} \to \Set,
+\qquad
+h_A(g\colon B' \to B) = (-\circ g).
+\]
+Intuitively, $h_A$ is \emph{the object $A$ as seen from everywhere}: its value at $B$ is the set of all ways $B$ can probe $A$. Presheaves and natural transformations form the functor category $[\C^{\op}, \Set]$, and $A \mapsto h_A$ extends to a functor
+\[
+h_{\bullet}\colon \C \longrightarrow [\C^{\op},\Set].
+\]
+\end{definition}
+
+\act{Act III: Anagnorisis --- The Yoneda Lemma}{In which the object recognizes itself in the mirror of its arrows}
+
+In tragedy, \emph{anagnorisis} is the recognition scene: the moment the protagonist discovers who someone --- usually who \emph{they themselves} --- really is. Here is mathematics' recognition scene. The protagonist is the object $A$; the mirror is the presheaf category; and what $A$ discovers is that the reflection is not a likeness but an identity.
+
+\begin{theorem}[Yoneda, 1954]\label{thm:yoneda}
+Let $\C$ be locally small, $A \in \C$, and $F\colon \C^{\op} \to \Set$ any presheaf. The map
+\[
+\Phi\colon \Nat(h_A, F) \longrightarrow F(A),
+\qquad
+\Phi(\eta) := \eta_A(\id_A)
+\]
+is a bijection, natural in both $A$ and $F$.
+\end{theorem}
+
+\begin{proof}
+\textbf{Construction of the inverse.} Given $x \in F(A)$, define $\Psi(x)\colon h_A \Rightarrow F$ componentwise by
+\[
+\Psi(x)_B \colon \Hom(B,A) \to F(B), \qquad f \mapsto F(f)(x).
+\]
+\emph{Naturality of $\Psi(x)$}: for $g\colon B' \to B$ in $\C$ and $f \in \Hom(B,A)$,
+\[
+\Psi(x)_{B'}\bigl(h_A(g)(f)\bigr)
+= \Psi(x)_{B'}(f \circ g)
+= F(f \circ g)(x)
+= F(g)\bigl(F(f)(x)\bigr)
+= F(g)\bigl(\Psi(x)_B(f)\bigr),
+\]
+the third equality by contravariant functoriality, $F(f \circ g) = F(g)\circ F(f)$. So the naturality square commutes.
+
+\textbf{$\Phi \circ \Psi = \id$.} Immediately,
+$\Phi(\Psi(x)) = \Psi(x)_A(\id_A) = F(\id_A)(x) = x.$
+
+\textbf{$\Psi \circ \Phi = \id$.} Let $\eta\colon h_A \Rightarrow F$ be arbitrary and take any $B$ and $f\colon B \to A$. Naturality of $\eta$ at the arrow $f$ gives the commuting square
+\[
+\begin{tikzcd}[column sep=huge]
+\Hom(A,A) \arrow[r, "\eta_A"] \arrow[d, "-\circ f"'] & F(A) \arrow[d, "F(f)"] \\
+\Hom(B,A) \arrow[r, "\eta_B"'] & F(B)
+\end{tikzcd}
+\]
+Chase the element $\id_A$ around both paths: along the left--bottom path it becomes $\eta_B(\id_A \circ f) = \eta_B(f)$; along the top--right path it becomes $F(f)(\eta_A(\id_A)) = \Psi(\Phi(\eta))_B(f)$. Commutativity forces
+\[
+\eta_B(f) = \Psi(\Phi(\eta))_B(f) \quad\text{for all } B, f,
+\]
+hence $\eta = \Psi(\Phi(\eta))$. The whole transformation is determined by the single element $\eta_A(\id_A)$: \emph{one point determines the totality}.
+
+\textbf{Naturality in $F$}: for $\theta\colon F \Rightarrow G$, one checks $\Phi(\theta \circ \eta) = \theta_A(\Phi(\eta))$ directly from the definition. \textbf{Naturality in $A$}: for $u\colon A \to A'$, precomposition $h_u\colon h_A \Rightarrow h_{A'}$ satisfies $\Phi(\eta \circ h_u^{-}) = F(u)(\Phi(\eta))$ by the same one-line chase. Both are routine and omitted from the display.
+\end{proof}
+
+\begin{corollary}[The Yoneda embedding is fully faithful]\label{cor:embed}
+$h_{\bullet}\colon \C \to [\C^{\op},\Set]$ is fully faithful, and therefore
+\[
+A \cong B \quad\Longleftrightarrow\quad h_A \cong h_B .
+\]
+\end{corollary}
+
+\begin{proof}
+Apply Theorem~\ref{thm:yoneda} with $F = h_B$:
+\[
+\Nat(h_A, h_B) \;\cong\; h_B(A) \;=\; \Hom_\C(A,B),
+\]
+and one verifies that this bijection is exactly the action of $h_\bullet$ on arrows: the arrow $u\colon A \to B$ maps to postcomposition $(u \circ -)$, whose image under $\Phi$ is $u \circ \id_A = u$. Fullness and faithfulness follow. For the equivalence: functors preserve isomorphism, giving $(\Rightarrow)$; conversely a natural isomorphism $\theta\colon h_A \cong h_B$ is, by fullness, $h_u$ for some $u\colon A \to B$, its inverse is $h_v$ for some $v\colon B \to A$, and faithfulness turns $h_{v\circ u} = \id_{h_A}$ and $h_{u \circ v} = \id_{h_B}$ into $v \circ u = \id_A$, $u \circ v = \id_B$.
+\end{proof}
+
+Now say what has been proved, in the vocabulary of the Prologos. Leibniz claimed that identity is exhausted by predicates and could not prove it. Corollary~\ref{cor:embed} \emph{is} that claim, with ``predicate'' made precise as ``morphism into the object from an arbitrary probe,'' and the biconditional upgraded to a fully faithful embedding: the object $A$, up to unique isomorphism, \emph{is} the presheaf $h_A$ --- is the organized totality of every way anything can relate to it. There is no residue. There is no \emph{hypokeimenon} underneath the arrows for a hidden column to store. Aristotle's lowest category of being has been proven to be the only one: \textbf{substance, examined with full rigor, decomposes without remainder into relation.}
+
+\begin{theorem}[Density: every presheaf is a colimit of representables]\label{thm:density}
+Let $F\colon \C^{\op} \to \Set$ be a presheaf and let $\El F$ denote its category of elements --- objects are pairs $(A, x)$ with $x \in F(A)$, arrows $(A,x) \to (A',x')$ are arrows $f\colon A \to A'$ in $\C$ with $F(f)(x') = x$. Then
+\[
+F \;\cong\; \colim_{(A,x) \in \El F} h_A .
+\]
+\end{theorem}
+
+\begin{proof}
+By Theorem~\ref{thm:yoneda}, each element $x \in F(A)$ corresponds to a natural transformation $\Psi(x)\colon h_A \Rightarrow F$. These form a cocone over the evident diagram $\El F \to [\C^{\op},\Set]$, $(A,x) \mapsto h_A$: for an arrow $f\colon (A,x) \to (A',x')$ of $\El F$ we need $\Psi(x') \circ h_f = \Psi(x)$, and indeed at each stage $B$ and each $g \in \Hom(B,A)$,
+\[
+\Psi(x')_B(f \circ g) = F(f\circ g)(x') = F(g)\bigl(F(f)(x')\bigr) = F(g)(x) = \Psi(x)_B(g).
+\]
+The cocone is universal: given any cocone $\bigl(\tau_{(A,x)}\colon h_A \Rightarrow G\bigr)$, define $\theta\colon F \Rightarrow G$ by
+\[
+\theta_A(x) := \Phi\bigl(\tau_{(A,x)}\bigr) = \bigl(\tau_{(A,x)}\bigr)_A(\id_A) \in G(A).
+\]
+Naturality of $\theta$ and the factorization $\tau_{(A,x)} = \theta \circ \Psi(x)$ follow from the cocone conditions by the same identity-chasing as in Theorem~\ref{thm:yoneda}, and uniqueness of $\theta$ is forced pointwise, since the components $\Psi(x)$ are jointly ``surjective on elements'': every $x \in F(A)$ is $\Psi(x)_A(\id_A)$.
+\end{proof}
+
+\begin{scholium}[The chorus speaks]
+In the tragedy's staging, the chorus is the colimit: many particular voices, no single one authoritative, whose \emph{coherent gluing} is the general statement. Theorem~\ref{thm:density} says every concept expressible over $\C$ --- every presheaf, however abstract --- is such a gluing of concrete, representable perspectives. Nothing general exists that is not assembled from particular points of view; and dually, the particular perspectives suffice to reconstruct everything. This is the mathematical license for \emph{federation}: no central node must hold the master concept, because the master concept is provably the colimit of the local ones.
+\end{scholium}
+
+\act{Act IV: Peripeteia --- Lambek's Fixed Point}{In which the arrow of construction reverses, and the foundation is shown to be forced}
+
+\emph{Peripeteia} is the reversal: the action turns back on itself and the hunter becomes the hunted. Yoneda told us what an object \emph{is}; the remaining question is what the \emph{first} object --- the primitive from which a system is built --- must \emph{be shaped like}. The answer is a reversal in the literal, arrow-theoretic sense: the structure map turns around and becomes an isomorphism.
+
+\begin{definition}[$F$-algebra; initiality]
+For an endofunctor $F\colon \C \to \C$, an \emph{$F$-algebra} is a pair $(X, \alpha)$ with $\alpha\colon F(X) \to X$; a morphism $(X,\alpha) \to (Y,\beta)$ is $\varphi\colon X \to Y$ with $\varphi \circ \alpha = \beta \circ F(\varphi)$. The algebra is \emph{initial} when exactly one algebra morphism leaves it toward every algebra.
+\end{definition}
+
+Think of $F$ as a grammar of construction --- ``a node is a label together with a bag of edges to nodes,'' say --- and of an algebra as any world in which that grammar can be evaluated. The initial algebra is the world freely generated by the grammar and nothing else: no junk, no confusion.
+
+\begin{theorem}[Lambek, 1968]\label{thm:lambek}
+If $(X, \alpha\colon F(X) \to X)$ is an initial $F$-algebra, then $\alpha$ is an isomorphism: $X \cong F(X)$.
+\end{theorem}
+
+\begin{proof}
+The pair $(F(X), F(\alpha))$ is itself an $F$-algebra, since $F(\alpha)\colon F(F(X)) \to F(X)$.
+
+\emph{Step 1.} By initiality there is a unique algebra morphism $i\colon (X,\alpha) \to (F(X), F(\alpha))$; unwinding the definition, the left square below commutes:
+\[
+\begin{tikzcd}[column sep=large]
+F(X) \arrow[r, "F(i)"] \arrow[d, "\alpha"'] & F(F(X)) \arrow[r, "F(\alpha)"] \arrow[d, "F(\alpha)"] & F(X) \arrow[d, "\alpha"] \\
+X \arrow[r, "i"'] & F(X) \arrow[r, "\alpha"'] & X
+\end{tikzcd}
+\qquad\quad
+i \circ \alpha = F(\alpha)\circ F(i).
+\]
+
+\emph{Step 2.} The right square commutes trivially, which says precisely that $\alpha$ is itself an algebra morphism $(F(X),F(\alpha)) \to (X,\alpha)$. Hence the composite $\alpha \circ i$ is an algebra endomorphism of the initial algebra $(X,\alpha)$. But initiality admits exactly one morphism $(X,\alpha) \to (X,\alpha)$, and $\id_X$ is one; therefore
+\[
+\alpha \circ i = \id_X .
+\]
+
+\emph{Step 3.} For the other composite, use Step 1 and functoriality:
+\[
+i \circ \alpha \;=\; F(\alpha) \circ F(i) \;=\; F(\alpha \circ i) \;=\; F(\id_X) \;=\; \id_{F(X)} .
+\]
+So $i = \alpha^{-1}$ and $\alpha$ is an isomorphism.
+\end{proof}
+
+Read the reversal. We never \emph{asked} for a fixed point. We asked only for minimality --- for the algebra with no junk and no confusion, the initial object of the design space. Lambek's theorem answers that the minimal thing is \emph{necessarily} a fixed point $X \cong F(X)$: a structure that is indistinguishable from one application of its own grammar to itself. The foundational class of Silmaril, $X \cong F(X)$, is therefore not an architectural taste. It is the unique shape that initiality permits. Any other choice would be either junk (non-initial) or contradiction (non-algebra). \textbf{The architect's freedom, examined with full rigor, decomposes into necessity} --- the tragic form exactly: the hero's free choices were the fate all along.
+
+\begin{theorem}[Ad\'amek's construction; statement with proof sketch]\label{thm:adamek}
+Let $\C$ have an initial object $0$ and colimits of $\omega$-chains, and let $F$ preserve those colimits. Then the colimit of the initial chain
+\[
+0 \xrightarrow{\ !\ } F0 \xrightarrow{\ F!\ } F^2 0 \xrightarrow{\ F^2!\ } \cdots
+\]
+carries an initial $F$-algebra structure.
+\end{theorem}
+
+\begin{proof}[Sketch]
+Set $X = \colim_n F^n 0$. Since $F$ preserves the colimit, $F(X) \cong \colim_n F^{n+1}0$, and the latter chain is the original chain with its first term removed, so it has the same colimit: $F(X) \cong X$; the comparison map is the algebra structure $\alpha$. Given any algebra $(Y, \beta)$, define a cocone $F^n 0 \to Y$ by induction --- the unique map $0 \to Y$ to start, then $F^n 0 \to Y$ yields $F^{n+1}0 \xrightarrow{F(-)} F(Y) \xrightarrow{\beta} Y$ --- and the induced map out of the colimit is the unique algebra morphism.
+\end{proof}
+
+\begin{scholium}
+Ad\'amek supplies what Lambek's abstract argument leaves open: \emph{existence}, and a picture. The primitive is the limit of an unfolding --- stage $n$ is ``everything constructible in $n$ steps of grammar,'' and the fixed point is the completed improvisation, the jam that contains all its finite riffs. Genesis by iteration, identity as the colimit of one's own history.
+\end{scholium}
+
+\act{Act V: The Fate Mechanism --- Lawvere's Diagonal}{In which one theorem is revealed to be the engine of Cantor, G\"odel, Tarski, and Turing}
+
+Tragedy requires a fate mechanism: a single inescapable law that manufactures all the particular dooms. In the mathematics of self-reference, that mechanism is one small theorem of Lawvere (1969), of which Cantor's theorem, G\"odel's incompleteness, Tarski's undefinability, and Turing's halting problem are the famous corollaries. It also polices the boundary of Act IV: it tells us exactly when fixed points are compulsory and when they are impossible.
+
+\begin{theorem}[Lawvere's fixed-point theorem]\label{thm:lawvere}
+In a cartesian closed category, suppose $\varphi\colon A \to Y^A$ is point-surjective: for every $g\colon 1 \to Y^A$ there is $a\colon 1 \to A$ with $\varphi \circ a = g$. Then every endomorphism $f\colon Y \to Y$ has a fixed point $y\colon 1 \to Y$ with $f \circ y = y$.
+\end{theorem}
+
+\begin{proof}
+Form the diagonal composite
+\[
+q \;:=\; \Bigl(\, A \xrightarrow{\ \langle \id_A, \id_A\rangle\ } A \times A \xrightarrow{\ \varphi \times \id_A\ } Y^A \times A \xrightarrow{\ \ev\ } Y \xrightarrow{\ f\ } Y \,\Bigr),
+\]
+i.e.\ in elementwise notation $q(a) = f\bigl(\varphi(a)(a)\bigr)$. Its exponential transpose is a point $\widehat{q}\colon 1 \to Y^A$; by point-surjectivity there exists $a_0\colon 1 \to A$ with $\varphi(a_0) = \widehat{q}$, i.e.\ $\varphi(a_0)(a) = q(a)$ for all $a$. Instantiate at $a = a_0$:
+\[
+\varphi(a_0)(a_0) \;=\; q(a_0) \;=\; f\bigl(\varphi(a_0)(a_0)\bigr).
+\]
+Then $y := \varphi(a_0)(a_0)$ is a fixed point of $f$.
+\end{proof}
+
+\begin{corollary}[Cantor]\label{cor:cantor}
+In $\Set$ there is no surjection $A \to 2^A$.
+\end{corollary}
+
+\begin{proof}
+Negation $\neg\colon 2 \to 2$ has no fixed point; by the contrapositive of Theorem~\ref{thm:lawvere}, no $\varphi\colon A \to 2^A$ is (point-)surjective.
+\end{proof}
+
+\begin{scholium}[Why the story needs coalgebra]
+Corollary~\ref{cor:cantor} is a hard limit on Act IV: the powerset functor $\mathcal{P}$ admits \emph{no} fixed point in $\Set$, hence no initial algebra --- there is no ``set of all sets of nodes'' to serve as a naive universe for a graph of graphs. The classical escape is to bound the branching ($\mathcal{P}_{\mathrm{fin}}$, or $\kappa$-small powerset), where initial algebras and, crucially, \emph{terminal coalgebras} return. The terminal coalgebra $(Z, \zeta\colon Z \to F(Z))$ is the exact dual of Act IV --- Lambek's argument dualizes verbatim to show $\zeta$ is an isomorphism --- and it is the natural home of \emph{observation}: possibly-infinite, non-well-founded behavior, streams, processes, the graph as it is \emph{watched} rather than as it was \emph{built}. Construction is induction into the initial algebra; observation is coinduction out of the terminal coalgebra. A knowledge system needs both, which forces the final act.
+\end{scholium}
+
+\act{Act VI: Synthesis --- The Bialgebra of Syntax and Semantics}{In which Apollo and Dionysus are married by a distributive law}
+
+\begin{definition}[Bialgebra for a distributive law]
+Let $\Sigma$ be an endofunctor of syntax (constructors) with free monad $\Sigma^{*}$, and $B$ an endofunctor of behavior (observations). An \emph{abstract GSOS law} is a natural transformation
+\[
+\lambda\colon \Sigma\,(\mathrm{Id} \times B) \;\Longrightarrow\; B\,\Sigma^{*},
+\]
+reading: the observable behavior of a composite term is determined by its components together with \emph{their} observable behaviors. A \emph{$\lambda$-bialgebra} is a triple $(X, \alpha\colon \Sigma X \to X, \gamma\colon X \to BX)$ in which algebra and coalgebra structures are compatible via $\lambda$.
+\end{definition}
+
+\begin{theorem}[Turi--Plotkin, 1997; statement]\label{thm:tp}
+For any abstract GSOS law $\lambda$: the initial $\Sigma$-algebra carries a unique $B$-coalgebra structure making it the initial $\lambda$-bialgebra; the terminal $B$-coalgebra carries a unique $\Sigma$-algebra structure making it the terminal $\lambda$-bialgebra; and the unique bialgebra map from the former to the latter --- interpretation of syntax into behavior --- has the property that \textbf{bisimilarity is a congruence}: behaviorally equivalent parts may be substituted in any context without changing observable behavior.
+\end{theorem}
+
+\begin{proof}[Sketch]
+$\lambda$ lifts $\Sigma^{*}$ to a monad on $B$-coalgebras and lifts $B$ to a comonad-like structure on $\Sigma^{*}$-algebras; initial and terminal objects lift along these liftings. The unique map between the lifted extremes is simultaneously an algebra map (hence compositional) and a coalgebra map (hence behavior-preserving); congruence of bisimilarity is the conjunction of the two.
+\end{proof}
+
+Name the wedding guests. The initial algebra is Apollonian: finite, constructed, syntactic, the score. The terminal coalgebra is Dionysian: infinite, observed, behavioral, the jam. The distributive law $\lambda$ is the discipline that lets them coexist in one object --- the rule that improvisation must respect the changes, that construction must be honest about what it will sound like. Turi and Plotkin's theorem is the guarantee that the marriage holds: \emph{what a thing is built as} and \emph{what a thing does when probed} cohere in a single bialgebra, and equivalence of behavior is stable under every syntactic context. The Silmaril base class realizes exactly this: Lambek's fixed point (Act IV) coupled to its observational dual through an abstract GSOS law, so that every construct of the system is a forced projection of one bialgebraic primitive.
+
+\act{Exodos: GraphAtlas}{In which the theorems are cashed out as architecture, and the counter-thesis is stated}
+
+The play ends where engineering begins. Collect the verdicts of the five acts and read them as a specification.
+
+\emph{From Yoneda (Theorem~\ref{thm:yoneda}, Corollary~\ref{cor:embed}).} A node in a knowledge graph has no hidden essence: its identity is, with mathematical exactness, the totality of its arrows --- its edges, its typed relations, its neighborhood as probed from every other node. A system that exposes all morphisms therefore conceals \emph{nothing that pertains to identity}. Conversely, a system that claims to hold a ``true identity'' beyond the inspectable relations is asserting a \emph{hypokeimenon} that the lemma proves empty: it is either mistaken about its own contents or misrepresenting them. Opacity is not a security posture; it is a metaphysical error with a rigorous refutation.
+
+\emph{From density (Theorem~\ref{thm:density}).} Every general concept over the graph is a colimit of representable, local perspectives. Federation is therefore mathematically sufficient: Hanseatic peers exposing their local hom-sets jointly determine every global presheaf, and no central authority is needed to custody the ``real'' concept, because the real concept is provably the gluing of the local ones. Two federated systems exposing the same morphisms represent the same objects --- Yoneda reproducibility --- so trust reduces to inspection.
+
+\emph{From Lambek and Ad\'amek (Theorems~\ref{thm:lambek}, \ref{thm:adamek}).} The primitive class $X \cong F(X)$ is not a design preference but the unique shape of the initial object in the design space; and it exists as the colimit of its own finite unfoldings. Every construct above it is a forced projection, not a discretionary layer.
+
+\emph{From Lawvere (Theorem~\ref{thm:lawvere}).} Self-reference is governed by law, not vibes: fixed points are compulsory where evaluation is surjective and impossible where the classifier has no fixed point. The system's universe must be stratified accordingly --- bounded branching where totality is needed, coalgebraic openness where behavior is infinite.
+
+\emph{From Turi--Plotkin (Theorem~\ref{thm:tp}).} Syntax and semantics --- the graph as recorded and the graph as observed --- are coupled by a distributive law under which behavioral equivalence is a congruence. Audit is therefore compositional: verifying the parts and the law verifies the whole.
+
+The tragedy's protagonist, substance metaphysics, walked twenty-five centuries believing in the essence beneath the arrows; the recognition scene showed the essence to be the arrows; the reversal showed even the foundation stone to be a fixed point forced by minimality; and the fate mechanism drew the exact boundary of self-reference. What survives the exodos is not a doctrine but a discipline: \textbf{deliver the field, expose the morphisms, and let the observer collapse where they will.} The look on every face that queries it is legible, because there is nothing behind the face. Round the decay of that colossal wreck of hidden essences, boundless and bare, the open, inspectable, federated arrows stretch far away.
+
+\vspace{2em}
+\begin{center}
+\color{silmaril}\rule{0.3\textwidth}{0.4pt}\\[0.6em]
+\textsc{quod erat demonstrandum --- et quod erat construendum}
+\end{center}
+
+\end{document}

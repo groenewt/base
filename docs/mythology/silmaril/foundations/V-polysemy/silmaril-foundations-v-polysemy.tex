@@ -1,0 +1,263 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathpazo}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{tikz-cd}
+\usepackage[margin=1.05in]{geometry}
+\usepackage{xcolor}
+\definecolor{silmaril}{RGB}{28,60,92}
+\definecolor{turtleshell}{RGB}{52,84,60}
+\definecolor{forge}{RGB}{120,54,20}
+\usepackage[colorlinks=true,linkcolor=silmaril,citecolor=silmaril,urlcolor=silmaril]{hyperref}
+\usepackage{enumitem}
+\usepackage{mdframed}
+\usepackage{longtable}
+\usepackage{array}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{scholium}[theorem]{Scholium}
+
+\newmdenv[linecolor=forge,linewidth=1pt,topline=true,bottomline=true,leftline=false,rightline=false,innertopmargin=5pt,innerbottommargin=5pt]{refrain}
+
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\V}{\mathcal{V}}
+\newcommand{\Set}{\mathbf{Set}}
+\newcommand{\Vect}{\mathbf{Vect}}
+\newcommand{\Hilb}{\mathbf{Hilb}}
+\newcommand{\FdHilb}{\mathbf{FdHilb}}
+\newcommand{\Cob}{\mathbf{nCob}}
+\newcommand{\Poly}{\mathbf{Poly}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\Kl}{\mathrm{Kl}}
+\newcommand{\pow}{\mathcal{P}}
+\newcommand{\stratum}[2]{\section{#1\\ {\normalsize\normalfont\itshape #2}}}
+
+\title{\color{silmaril}\textbf{Algebra as Polysemy}\\[0.5ex]
+\large \texttt{AGENT.md}, \texttt{skills/**/*.md},\\ and the One Structure Wearing Many Faces\\[0.3ex]
+\normalsize Silmaril Foundations Series, V}
+\author{GraphAtlas / Silmaril}
+\date{2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent Foundations IV descended: the Yoneda principle at every stratum, the boundary law forbidding self-totalization. Foundations V turns Yoneda \emph{sideways}. One abstract algebraic theory --- a category with finite products (Lawvere) --- is known by the totality of its structure-preserving functors, its models. Each model is one \emph{projection}, one \emph{meaning}. Polysemy is functorial. The document is built in three fused movements. \textsc{Part A} (\texttt{AGENT.md}) formalizes the algebra of what an agent \emph{does}: coalgebra for behavior, monad for effect, bialgebra (Turi--Plotkin) for the two glued by a distributive law, and monoidal/optic/polynomial structure for interaction. \textsc{Part B} (\texttt{skills/**/*.md}) formalizes skills as morphisms --- arrows, Freyd categories, profunctors --- unfolded as the initial algebra of a skill-grammar. \textsc{Part C} is the payload: an encyclopedic table of one abstract structure projecting across topology, music, color, quantum, computation, and a dozen more domains --- the Baez--Stay Rosetta Stone, extended. Terse by design: every line load-bearing. Build below the boundary; project, do not totalize.
+\end{abstract}
+
+{\small\tableofcontents}
+\newpage
+
+\stratum{Stratum 0: The Boundary, Restated}{Working beneath the line that forbids a top}
+
+Foundations IV: eleven strata, at each the Yoneda principle (a thing is its relationships) and a boundary law (Lawvere's diagonal, Girard's paradox) forbidding any level from containing its own totality. V accepts the boundary and works below it. Not one super-structure swallowing all --- that is the forbidden $\mathcal{U}:\mathcal{U}$ --- but one \emph{abstract} structure with many projections. The polysemy \emph{is} the escape: you never collect all models into a single totalizing object; you present the theory and let functors project. Descent became breadth; breadth obeys the same law.
+
+\stratum{Stratum I: Functorial Semantics --- The Spine}{Lawvere 1963: a theory is a category, a meaning is a functor}
+
+\begin{definition}[Lawvere theory; model]
+A \emph{(Lawvere) algebraic theory} is a category $T$ with finite products in which every object is a finite power $x^n$ of a single generator $x$. A \emph{model} is a finite-product-preserving functor $M\colon T \to \Set$ (or into any category $\D$ with finite products); a \emph{homomorphism} of models is a natural transformation.
+\end{definition}
+
+Lawvere's thesis (\emph{Functorial Semantics of Algebraic Theories}, Columbia 1963; PNAS 50(5):869--872; TAC Reprints 5, 2004) states the entire payload of this document in one sentence: algebras and other structures ``are actually functors to a background category from a category which abstractly concentrates the essence of a certain general concept of algebra, and indeed homomorphisms are nothing but natural transformations between such functors.''
+
+Read it as ontology. One theory $T$; many backgrounds $\D$; each structure-preserving $T \to \D$ is one \emph{meaning}. The abstract group theory is a single category; its models in $\Set$ are groups, in $\mathbf{Top}$ topological groups, in $\mathbf{Man}$ Lie groups, in $\C$ internal groups --- \emph{same theory, many domain-clothes}. Meaning is polysemous but coherent because all interpretations are functors out of one object, and by Yoneda the theory is reflected in the totality of them: \textbf{Yoneda for theories}. Birkhoff's HSP theorem (varieties $=$ classes closed under homomorphic images, subalgebras, products) is the universal-algebra shadow; operads and PROPs generalize to many-input operations; and the shift from cartesian $T$ (products) to symmetric-monoidal $T$ ($\otimes$) is exactly the Segal--Atiyah upgrade that turns a classical theory into a TQFT (Stratum XI). The informal shadow --- Lakoff's conceptual metaphor, Hofstadter's ``analogy as the core of cognition'' --- is functorial interpretation felt from inside: a source schema mapped structure-preservingly onto a target. The ``unreasonable effectiveness'' question dissolves: the same mathematics recurs because it \emph{is} the abstract theory, and the domains are its models.
+
+\begin{refrain}
+\emph{The spine}: theory $=$ category, meaning $=$ structure-preserving functor, polysemy $=$ the model class. Everything below is an instance.
+\end{refrain}
+
+\begin{center}\color{silmaril}\rule{0.25\textwidth}{0.4pt}\\[0.3em]\textsc{Part A --- \texttt{AGENT.md}: the algebra of agents}\end{center}
+
+\stratum{Stratum II: What an Agent Does --- Process Calculi}{The classical equational algebra of behavior}
+
+Milner's CCS, Hoare's CSP, Milner--Parrow--Walker $\pi$-calculus (mobility, name-passing), Bergstra--Klop ACP (equational axioms for choice $+$, sequence $\cdot$, parallel $\parallel$). Behavioral equality is \emph{bisimulation} (Park, Milner): states $s \sim t$ iff every transition of one is matched by the other with successors again bisimilar. Structural Operational Semantics (Plotkin, Aarhus 1981; JLAP 2004) gives transition rules by induction on syntax. The \emph{GSOS} format (Bloom--Istrail--Meyer) constrains rules so that bisimilarity is guaranteed a \emph{congruence}: any GSOS specification induces a unique interpretation compositional with respect to strong bisimilarity --- substitution of bisimilar parts preserves behavior. Congruence is the whole game: it is what lets an agent be assembled from sub-agents.
+
+\stratum{Stratum III: The Bialgebraic Account --- Turi--Plotkin}{Syntax is an algebra, behavior a coalgebra, rules a distributive law}
+
+Turi \& Plotkin, ``Towards a Mathematical Operational Semantics'' (LICS 1997). Let $\Sigma$ be a syntax endofunctor (free monad $\Sigma^{*}$), $B$ a behavior endofunctor (cofree comonad). Operational rules are an \emph{abstract GSOS law} --- a natural transformation
+\[
+\lambda\colon \Sigma(\mathrm{Id}\times B)\;\Longrightarrow\; B\,\Sigma^{*}.
+\]
+A model is a \emph{bialgebra}: a $\Sigma$-algebra $\alpha\colon \Sigma X \to X$ and a $B$-coalgebra $\gamma\colon X \to BX$ over one carrier, compatible via $\lambda$.
+
+\begin{theorem}[Turi--Plotkin; Klin TCS 2011]\label{thm:tp}
+For every abstract GSOS law $\lambda$: the initial $\Sigma$-algebra carries a unique $B$-coalgebra structure (operational model); the terminal $B$-coalgebra carries a unique $\Sigma$-algebra structure (denotational model); the unique bialgebra map between them interprets syntax as behavior; and \emph{bisimilarity is a congruence} --- compositionality for free, without ad-hoc proof.
+\end{theorem}
+
+This is the load-bearing structure of \texttt{AGENT.md}. \textbf{An agent is initial-algebra syntax $+$ final-coalgebra behavior, glued by a distributive law.} The Apollonian score (constructed syntax) and the Dionysian jam (observed behavior) married by $\lambda$ --- the exact figure of Foundations~I--IV, now the definition of an actor.
+
+\stratum{Stratum IV: Agents as Coalgebras}{One functor, many species of machine}
+
+Rutten, ``Universal Coalgebra'' (TCS 249, 2000). A system is a coalgebra $c\colon X \to F(X)$ of a behavior functor $F$; changing $F$ changes the species:
+\[
+\begin{array}{ll}
+F(X)=X^{A} & \text{streams / deterministic automata (final coalgebra } A^{\omega}) \\
+F(X)=2\times X^{A} & \text{Moore machines} \\
+F(X)=(\pow X)^{A} & \text{labelled transition systems (Aczel--Mendler)} \\
+F(X)=\mathcal{D}(X) & \text{Markov / probabilistic systems (de Vink--Rutten)} \\
+F(X)=\mathcal{D}(X)^{A} & \text{probabilistic LTS; Larsen--Skou bisimulation}
+\end{array}
+\]
+Bisimulation is a span of coalgebra homomorphisms; the probabilistic case coincides with the Larsen--Skou definition, proving the coalgebraic notion \emph{is} the right one across species. The \emph{final coalgebra} is the space of all behaviors; the unique map into it is \emph{coinduction} --- semantics by observation. Coalgebraic modal logic (Moss's cover modality $\nabla$; Pattinson's predicate liftings) is the internal language of observation: modalities are the measurements one may perform on an agent. State and observation, categorically closed.
+
+\stratum{Stratum V: Effects as Monads --- Moggi}{The Kleisli category is the category of effectful programs}
+
+Moggi (LICS 1989; \emph{Inf.\ \& Comput.}\ 93(1):55--92, 1991). A notion of computation is a strong monad $T$; programs form the \emph{Kleisli category} $\Kl(T)$, where a morphism $A \to B$ is a map $A \to TB$ --- an effectful arrow. One interface $(\eta,\mu)$, many effects:
+\[
+\begin{array}{ll}
+TX = S \Rightarrow (X\times S) & \text{state} \\
+TX = \pow X & \text{nondeterminism} \\
+TX = \mathcal{D}X\ (\text{Giry}) & \text{probability} \\
+TX = (X\to R)\to R & \text{continuation} \\
+TX = X + E & \text{exception}
+\end{array}
+\]
+\emph{Kleisli} $=$ free algebras (the effectful programs); \emph{Eilenberg--Moore} $=$ all $T$-algebras (the \emph{handlers}). Algebraic effects (Plotkin--Power, FoSSaCS 2002; Plotkin--Pretnar, ESOP 2009): effects presented by operations $+$ equations --- \emph{a Lawvere theory} (Stratum I) --- with handlers as homomorphisms from the free model. Comonads dualize: context, environment, coeffect. An effect \emph{is} a theory; its monad is the free-model monad. The spine runs straight through the agent's side effects.
+
+\stratum{Stratum VI: Compositional Structure --- Monoidal, Optic, Polynomial}{The ambient algebra of interacting agents}
+
+The Baez--Stay Rosetta Stone (``Physics, Topology, Logic and Computation,'' LNP 813, 2011; arXiv:0903.0340): object $=$ system, morphism $=$ process, all four of physics/topology/logic/computation being \emph{closed symmetric monoidal categories}, with $\Set$ ``the odd man out: it is cartesian.'' String diagrams (Joyal--Street, \emph{Adv.\ Math.}\ 1991): $\otimes$ parallel, $\circ$ sequential. On this ambient stage:
+
+\emph{Open systems} $=$ structured/decorated cospans $X \to S \leftarrow Y$ (Baez--Courser--Fong), composed by pushout --- interfaces glued along shared boundary.
+
+\emph{Lenses \& optics} (Riley 2018; Clarke et al., \emph{Compositionality} 6(1), 2024): a lens is $(\mathrm{get}\colon S\to A,\ \mathrm{put}\colon S\times B\to T)$; profunctor optics ``construct accessors for complex structures by combining simpler ones,'' via the isomorphism between optics and profunctor-polymorphic functions with \emph{Tambara-module} structure. Boisseau--Gibbons (ICFP 2018) prove the representation theorem --- and it is \emph{literally Yoneda} (the double-Yoneda embedding), tying interaction back to the spine.
+
+\emph{Categorical cybernetics / open games} (Ghani--Hedges--Winschel--Zahn, LICS 2018; Capucci--Gavranovi\'c--Hedges--Rischel, arXiv:2105.06332). An agent is a \emph{parametrised optic} with a \textbf{play/coplay} structure: play (forward: observe $\to$ act), coplay (backward: propagate payoff / prediction error). An open game $G\colon A\to B$ is a triple (strategies $\Sigma_G$; play $\Sigma_G \to \mathrm{Optic}(A,B)$; equilibrium predicate). The same $\mathrm{Para}\circ\mathrm{Optic}$ ingredients ``appear repeatedly at multiple levels'' --- self-similarity, Stratum-IV of Foundations IV.
+
+\emph{Polynomial functors} (Niu--Spivak, \emph{Polynomial Functors}, CUP 2025; arXiv:2312.00990). A polynomial $p=\sum_{i\in p(1)} y^{p[i]}$ is positions $+$ directions; $\Poly$ is the algebra of interfaces, morphisms sending ``positions forward and directions backward,'' modeling two-way communication. A dynamical system is a dependent lens; a Moore machine a special lens; and (Joyal) \emph{a polynomial comonoid is exactly a category}. Mode-dependent dynamics $=$ directions depending on position.
+
+\emph{Categorical systems theory} (Myers, \emph{Categorical Systems Theory}; EPTCS 333:154--167, 2021): a double category with objects $=$ interfaces, one direction $=$ wiring (contravariant reparametrisation), the other $=$ behaviors (covariant: trajectories, steady states, periodic orbits), and the theorem that behaviors ``compose according to the laws of matrix arithmetic.''
+
+\stratum{Stratum VII: Resources, Sessions, Protocols}{Linear logic is the logic of agents that cannot copy the world}
+
+Linear logic (Girard 1987): agents consume/produce resources; $\otimes$, $\multimap$, no free contraction or weakening. Baez--Stay: multiplicative intuitionistic linear logic is ``the system of logic suitable for closed symmetric monoidal categories --- nothing more or less.'' Their chemistry morphism $O_2 \otimes H_2 \otimes H_2 \vdash H_2O \otimes H_2O$ cannot duplicate molecules ($H_2 \nvdash H_2 \otimes H_2$): no-cloning as no-diagonal, resource honesty as noncartesianity. \emph{Session types $=$ propositions} (Caires--Pfenning, CONCUR 2010; Wadler, ``Propositions as Sessions,'' ICFP 2012 / JFP 2014): linear-logic propositions are protocols, cut elimination is communication, and the correspondence yields languages ``free from races and deadlock.'' A protocol is a proof; an agent honoring it is a term inhabiting a linear type.
+
+\stratum{Stratum VIII: Bayesian Agents --- Active Inference}{Perception and action as one optic with play and coplay}
+
+Smithe (DPhil, arXiv:2212.12538; ``Compositional Active Inference,'' arXiv:2109.04461). Perception/action $=$ approximate Bayesian inference minimizing variational free energy, expressed as \emph{Bayesian lenses} (forward: prior/likelihood; backward: Bayesian update) and \emph{statistical games} over $\Poly$. A cybernetic agent is an optic whose play predicts/acts and whose coplay updates on prediction error --- the identical play/coplay of open games (Stratum VI). Whether \emph{every} dynamical system of the right type is playing a statistical game, and whether every cybernetic system is an active-inference system, are stated open questions --- a frame, not yet a theorem, and flagged as such.
+
+\begin{center}\color{silmaril}\rule{0.25\textwidth}{0.4pt}\\[0.3em]\textsc{Part B --- \texttt{skills/**/*.md}: skills as composable algebra}\end{center}
+
+\stratum{Stratum IX: Skills as Morphisms}{Arrows, Freyd categories, profunctors --- one algebra at three generalities}
+
+A skill has a typed interface: precondition object (input capability), postcondition object (output capability). Skills compose when postcondition meets precondition: \textbf{skill composition $=$ morphism composition}. Objects $=$ capabilities; morphisms $=$ skills; $\otimes$ $=$ parallel skills over resources.
+
+\emph{Arrows} (Hughes, \emph{Sci.\ Comput.\ Program.}\ 37(1--3):67--111, 2000) generalize monads by three operations: $\mathrm{arr}\colon (a\to b)\to \mathsf{A}\,a\,b$ (lift a pure function), ${\ggg}\colon \mathsf{A}\,a\,b \to \mathsf{A}\,b\,c \to \mathsf{A}\,a\,c$ (compose, wiring outputs to inputs), $\mathrm{first}\colon \mathsf{A}\,a\,b \to \mathsf{A}\,(a,c)\,(b,c)$ (run on part of a structured input, thread the rest). Hughes' motive: several useful libraries are ``fundamentally incompatible with the monadic interface''; arrows widen it. Canonical instances: pure functions $(\to)$ and the Kleisli type $a \to m\,b$ --- arrows subsume monads. This is the precise algebra of typed processes for skills; the arrow laws make it a theory (Stratum I).
+
+\begin{theorem}[Arrows $=$ enriched Freyd categories; Atkey ENTCS 2011]\label{thm:freyd}
+A Freyd category is an identity-on-objects functor $J\colon \C \to \mathsf{K}$ with $\C$ cartesian and $\mathsf{K}$ symmetric premonoidal, $J$ preserving the structure. Arrows are enriched Freyd categories; and since \emph{closed} Freyd categories are equivalent to strong monads, arrows satisfying the closure condition are equivalent to strong monads.
+\end{theorem}
+
+So arrows $\supsetneq$ Freyd categories $\supsetneq$ strong monads: one algebra, three generalities --- the spine again. Jacobs--Heunen--Hasuo (JFP 2009) take an arrow to be a \emph{monoid in the category of profunctors} $\C^{\op}\times\C \to \V$. \emph{Profunctors} $P\colon \C^{\op}\times \D \to \Set$ --- ``matrices of sets'' relating inputs to outputs --- are the maximally general typed-process structure; a capability is a typed interface object, a skill a heteromorphism, composition the coend. Profunctor optics (Stratum VI) are the bidirectional refinement.
+
+\stratum{Stratum X: Skills as Operad and Forge}{Hierarchy by nesting; the DSL as an initial-algebra unfolding}
+
+Hierarchical skills via operads: an operad $O$ has $n$-ary operations $O(x_1,\dots,x_n;y)$ composing by substitution; a complex skill is an operad operation wiring sub-skills; Spivak's operad of wiring diagrams instantiates skills-nested-in-skills.
+
+Skills as the \textbf{initial-algebra unfolding of a skill-grammar} (the ``Forge DSL''). Let $F$ be the grammar signature endofunctor; the language of skills is the initial algebra $\mu F$, and by Lambek's lemma the structure map $F(\mu F)\to \mu F$ is an isomorphism, so $\mu F \cong F(\mu F)$ is the least fixed point --- the skill-tree type. Generating skills as \emph{forced extensions of a primitive} is freely unfolding $F$ over atomic capabilities, i.e.\ the free monad $F^{*}$. Turi--Plotkin (Stratum III) then glues this syntax (initial $F$-algebra) to skill \emph{behavior} (final coalgebra) by a distributive law: \textbf{a skill library is a bialgebra} --- the same structure as \texttt{AGENT.md}. Atomic contracts are the generators; composite skills are terms; Lambek guarantees the grammar closes. \texttt{AGENT.md} and \texttt{skills/**/*.md} are one bialgebra seen from two sides: what acts, and what it can do.
+
+\begin{center}\color{silmaril}\rule{0.25\textwidth}{0.4pt}\\[0.3em]\textsc{Part C --- algebra as polysemy: the projection table}\end{center}
+
+\stratum{Stratum XI: The Five Samples}{Each domain a functor out of one abstract structure}
+
+\textbf{1. Topology.} A \emph{frame/locale} is a complete lattice with finite meets distributing over arbitrary joins $=$ the algebra of open sets $=$ (as complete Heyting algebra) the algebra of intuitionistic logic. Stone/Esakia duality: topology $\leftrightarrow$ algebra $\leftrightarrow$ logic. Baez--Stay: intuitionistic propositional calculus with $\wedge,\top,\Rightarrow$ is exactly a Heyting algebra, ``a cartesian closed poset $C$ such that $C^{\op}$ is also cartesian.'' The \emph{Sierpi\'nski space} $\mathbb{S}$ is dualizing: maps $X\to\mathbb{S}$ $=$ opens of $X$. \emph{TQFT} (Atiyah--Segal): a symmetric monoidal functor $Z\colon \Cob \to \Vect$ --- a topological theory is \emph{literally} a Lawvere-style model, over cobordisms not products (the Segal--Atiyah upgrade of Stratum I).
+
+\textbf{2. Music.} The T/I group (transposition $+$ inversion) on 12 pitch classes $=$ \emph{dihedral group} $D_{24}$. Neo-Riemannian PLR group (three involutions on the 24 triads) is \emph{Lewin-dual} to T/I: each is the other's centralizer in $\mathrm{Sym}(24)$ --- the permutations commuting with PLR are exactly T/I, and vice versa. Lewin's \emph{Generalized Interval System} $=$ a group $G$ acting simply transitively on a space $=$ a \emph{$G$-torsor}: you may subtract two points to get an interval, but there is no distinguished origin. Tonnetz $=$ torus / simplicial complex; Mazzola, \emph{The Topos of Music} (2002), builds sheaves and topoi over musical categories.
+
+\textbf{3. Color.} Human color $=$ a 3-dim vector space (trichromacy; the LMS cone space). Mixing carries \emph{two} structures: additive (light) vs subtractive (pigment) --- distinct monoids, a semiring-like duality. \emph{Metamerism} $=$ the kernel: the linear map (spectrum $\in \infty$-dim) $\to$ (LMS $\in \mathbb{R}^3$) has vast kernel; metamers are a coset. \emph{Hue $=$ a circle} $SO(2)$; complementary colors are the antipodal involution $\sigma$, $\sigma^2=e$ --- the same swap recurring.
+
+\textbf{4. Quantum superposition.} \textbf{Superposition is the free-vector-space functor}: the free $\mathbb{C}$-module monad $V\colon \Set\to\Vect_\mathbb{C}$ sends classical states to their span; superposition $=$ formal linear combination $=$ the monad's unit/multiplication (cf.\ the distribution monad $\mathcal{D}$ for classical probability --- same ``free combination'' pattern, different semiring). $\FdHilb$ is a \emph{dagger compact category} (Abramsky--Coecke, LICS 2004): $\dagger$ $=$ adjoint, compact $=$ bendable wires $=$ entanglement (cup/cap), yielding teleportation as a diagram identity. ZX-calculus (Coecke--Duncan) $=$ complementary Frobenius algebras with a complete graphical rewrite system. \emph{No-cloning $=$ no natural diagonal}: $\Hilb$ with $\otimes$ is noncartesian, so duplication $\Delta$ does not exist naturally.
+
+\textbf{5. Combinators / currying.} \textbf{Currying $=$ the cartesian-closed adjunction} ${-}\times A \dashv (-)^A$: $\Hom(X\times A,B)\cong \Hom(X,B^A)$. Curry--Howard--Lambek: proofs $=$ programs $=$ morphisms in a cartesian closed category; the $\lambda$-calculus is the internal language of a CCC. SKI/BCKW $=$ a combinatory algebra presenting the closed structure point-free; BCI (no K/W $=$ no weakening/contraction) $=$ the linear fragment $=$ closed \emph{symmetric monoidal}, the linear-logic corner of the Rosetta Stone.
+
+\stratum{Stratum XII: Wide --- The Recurring Structures}{Encyclopedic: one structure, many faces}
+
+\textbf{Group theory} --- reversible transformation. Crystallography, Rubik's cube, Galois theory (solvability $\leftrightarrow$ solvable group), gauge symmetry, the eightfold way ($SU(3)$ irreps), Noether (symmetry $\leftrightarrow$ conservation). The swap $\sigma$ ($\mathbb{Z}/2\mathbb{Z}$) is the universal atom: braiding, complementary color, musical inversion, the dagger, involutive negation. A representation of $G$ $=$ a functor $G\to\Vect$ (a model of the one-object category $G$).
+
+\textbf{Monoids / semigroups} --- sequential accumulation. Free monoid $=$ strings; Kleene algebra $=$ regular expressions (idempotent semiring with star); automata $=$ monoid actions; the fold/catamorphism $=$ the unique homomorphism from the free monoid. \emph{Krohn--Rhodes} (\emph{Trans.\ AMS} 116, 1965): every finite semigroup divides a wreath product of \emph{simple groups} (dividing it) and the flip-flop --- the ``prime decomposition of automata,'' the structure theory behind hierarchical skill/agent decomposition: any behavior $=$ a cascade of permutation (reversible) and reset (memory) primes.
+
+\textbf{Semirings / rigs} --- ``sum and product,'' one algorithm schema, many carriers:
+\[
+\begin{array}{ll}
+(\vee,\wedge) & \text{reachability / logic} \\
+(\min,+) \text{ tropical} & \text{shortest paths; Viterbi in }-\log \\
+(+,\times)/\mathbb{R}_{\ge0} & \text{probability; forward algorithm} \\
+\mathbb{N}[X] & \text{database provenance} \\
+\mathbb{C} & \text{quantum amplitudes}
+\end{array}
+\]
+Green--Karvounarakis--Tannen (PODS 2007): incomplete, probabilistic, bag, and why-provenance databases ``are particular cases of the same general algorithms involving semirings,'' all factoring through the universal provenance semiring $\mathbb{N}[X]$. \textbf{Directly relevant to GraphAtlas}: federated query lineage is semiring-annotated.
+
+\textbf{Lattices / order} --- logic (Boolean/Heyting), Formal Concept Analysis (concept lattice $=$ a Galois connection between objects and attributes), domain theory (Scott domains $=$ semantics of computation), the subobject lattice. \emph{Knaster--Tarski}: a monotone map on a complete lattice has a complete lattice of fixed points --- unifying recursion (least fixed point), Kleene iteration, and loop semantics.
+
+\textbf{Adjunctions} --- ``arise everywhere'' (Mac Lane). Free $\dashv$ forgetful for every algebraic structure; Galois connections $=$ adjunctions between posets; quantifiers as adjoints (Lawvere: $\exists \dashv \text{subst} \dashv \forall$); currying $=$ product $\dashv$ exponential; syntax $\dashv$ semantics.
+
+\textbf{Vector spaces} --- superposition and dimension. Quantum, color, Fourier (change of basis), signal processing, PCA/embeddings, word embeddings (``king $-$ man $+$ woman $\approx$ queen''), graph spectra (the Laplacian), representation theory ($G\to$ matrices).
+
+\textbf{Convolution / group algebras} --- $k[G]$ with convolution; the Fourier transform \emph{diagonalizes} convolution (Pontryagin: convolution on $G$ $\leftrightarrow$ pointwise product on $\hat G$). Signal processing, convolution of distributions, and \emph{geometric deep learning} (Bronstein--Bruna--Cohen--Veli\v{c}kovi\'c, arXiv:2104.13478): ``in the spirit of Felix Klein's Erlangen Program,'' CNNs $=$ translation-equivariant, GNNs $=$ permutation-equivariant, spherical CNNs $=$ $SO(3)$-equivariant. Equivariance $=$ a morphism of $G$-representations (a natural transformation of group actions --- Stratum I).
+
+\textbf{Operads} --- composition with many inputs: wiring diagrams, chemical reaction networks, syntax trees, the little-cubes operad (iterated loop spaces), and back to skills/agents (Strata VI, X).
+
+\textbf{Hopf algebras / bialgebras} --- combinatorics (Joyal species $\to$ generating functions; Aguiar--Mahajan translate Hopf monoids in species to graded Hopf algebras, encompassing quantum groups); \emph{renormalization} (Connes--Kreimer, \emph{CMP} 199, 1998): the subtraction procedure of perturbative QFT is a Hopf algebra whose antipode solves the forest formula, the Birkhoff decomposition $\varphi = \varphi_-^{-1}\star\varphi_+$ splitting counterterm from renormalized part; and the Turi--Plotkin agent bialgebra (Stratum III).
+
+\textbf{Sheaves} --- local-to-global gluing. Native home topology; \emph{quantum contextuality} (Abramsky--Brandenburger, \emph{NJP} 13:113036, 2011): an empirical model is a presheaf on measurement contexts, and contextuality/non-locality is exactly ``obstructions to the existence of global sections,'' with Bell/Hardy/GHZ occupying successively higher levels of a cohomological hierarchy; \emph{databases} (Spivak, \emph{Inf.\ \& Comput.}\ 217, 2012): a schema is a small category $\C$, an instance a functor $\C\to\Set$, migration an adjoint triple $\Sigma_F \dashv \Delta_F \dashv \Pi_F$; signal processing on networks (Robinson's sheaf Laplacian); and \textbf{knowledge graphs / federation}: each node's local ontology is a stalk, edge alignments are restriction maps, global federated knowledge is a global section, inconsistency is a cohomological obstruction. \textbf{Federation is sheaf gluing.}
+
+\textbf{Dualities} --- ``space $\leftrightarrow$ algebra of functions.'' Stone (Boolean algebras $\simeq$ Stone spaces), Gelfand (commutative C*-algebras $\simeq^{\op}$ compact Hausdorff spaces; noncommutative $=$ ``noncommutative space''), Pontryagin (LCA groups $\simeq$ characters; underlies Fourier), Isbell (space $\leftrightarrow$ quantity), Zariski (comm.\ rings $\simeq^{\op}$ affine schemes). All one pattern: an object recovered from its algebra of observations --- the Yoneda/relational thesis of GraphAtlas, now a family of theorems.
+
+\stratum{Stratum XIII: The Extended Rosetta Stone}{One structure read across; one domain read down}
+
+{\footnotesize
+\renewcommand{\arraystretch}{1.25}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{2.1cm}|*{6}{>{\raggedright\arraybackslash}p{1.55cm}}@{}}
+\textbf{structure} & \textbf{topology} & \textbf{logic} & \textbf{computation} & \textbf{music} & \textbf{quantum} & \textbf{data / Atlas}\\
+\hline\endhead
+object & manifold & proposition & data type & pitch-class set & Hilbert space & schema node / capability\\
+morphism & cobordism & proof & program & transposition / PLR op & linear / CP map & query / skill / migration\\
+$\otimes$ & disjoint union & $\otimes$ conj.\ & product / parallel & simultaneity & tensor of systems & product of tables\\
+dual / $\dagger$ & orientation rev.\ & lin.\ negation & continuation & inversion $I$ & bra/ket adjoint & reverse mapping\\
+symmetry grp & mapping class grp & type isos & type isos & T/I \& PLR ($D_{24}$) & $U(n)$ & schema autos\\
+semiring & --- & Boolean & $(\min,+),(+,\times)$ & --- & $\mathbb{C}$ & provenance $\mathbb{N}[X]$\\
+coalgebra / final & --- & --- & streams / LTS & --- & quantum channel & agent state \& obs.\\
+sheaf / global sec.\ & bundle sections & --- & distributed data & voice-leading & contextuality obstr.\ & federated gluing\\
+adjunction / duality & Poincar\'e & $\exists\dashv\text{sub}\dashv\forall$ & free$\dashv$forget; curry & GIS morphisms & Gelfand & $\Sigma\dashv\Delta\dashv\Pi$; Stone\\
+\end{longtable}}
+
+Read \emph{horizontally}: one abstract structure wearing many domain-clothes. Read \emph{vertically}: one domain is a model of the whole theory. This is polysemy as functorial projection --- the Silmaril: one light refracted into many jewels, which cannot be totalized (Stratum 0) but can be presented and projected.
+
+\stratum{Exodos: The GraphAtlas Program}{Build below the boundary; project, do not totalize}
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=3pt]
+\item \textbf{Bialgebra discipline for \texttt{AGENT.md}.} Fix syntax functor $\Sigma$ (action grammar) and behavior functor $B$ (observation type); specify the distributive law $\lambda$ (abstract GSOS) once --- this buys compositional bisimulation-congruence for free (Theorem~\ref{thm:tp}). \emph{Threshold}: if the operational rules cannot be phrased as an abstract GSOS law, congruence is not guaranteed --- the signal to refactor the rule format.
+\item \textbf{Arrow / (enriched) Freyd structure for \texttt{skills/**/*.md}}, with a monoidal product for parallel capability use; generate the skill DSL as the free monad on a primitive-capability signature ($\mu F \cong F(\mu F)$, Stratum X). \emph{Threshold}: if skills need genuine two-input structured feedback, move from strong monads to arrows/optics --- exactly Atkey's boundary (Theorem~\ref{thm:freyd}).
+\item \textbf{Federation as a presheaf/sheaf on the schema category}, with $\mathbb{N}[X]$ provenance annotations; detect misalignment as a failed global section (Abramsky--Brandenburger obstruction); migrate via Spivak's $\Sigma_F \dashv \Delta_F \dashv \Pi_F$.
+\item \textbf{The extended Rosetta table as design invariant.} Every new subsystem declares which row it instantiates, forcing reuse of one algebra rather than bespoke code --- the operational form of ``polysemy as functorial projection.''
+\end{enumerate}
+
+Eleven strata below, Yoneda; here, twelve strata across, Yoneda turned sideways: a thing is its projections. The tragedy holds --- Lawvere--Girard: no functor category contains itself, the theory is never in full a model of itself. So we federate by gluing local stalks, annotate by provenance semirings, compute agents as bialgebras and skills as arrows --- each a projection of the single algebraic light. Build below the boundary. Project, do not totalize.
+
+\vspace{1.5em}
+\begin{center}
+\color{silmaril}\rule{0.3\textwidth}{0.4pt}\\[0.5em]
+\textsc{una structura, vultus innumeri}\\[0.2em]
+{\color{forge}\itshape one structure, countless faces}
+\end{center}
+
+\appendix
+\section{Primary Sources}
+{\footnotesize
+Lawvere, \emph{Functorial Semantics of Algebraic Theories}, Columbia 1963 (TAC Reprints 5). Birkhoff 1935 (HSP).\ Milner, \emph{CCS} 1980; Hoare, \emph{CSP} 1985; Milner--Parrow--Walker ($\pi$) 1992; Bergstra--Klop (ACP) 1984. Plotkin, SOS, Aarhus 1981 / JLAP 60--61, 2004. Bloom--Istrail--Meyer (GSOS), JACM 1995. Turi--Plotkin, LICS 1997; Klin, TCS 412(38), 2011. Rutten, ``Universal Coalgebra,'' TCS 249, 2000; de Vink--Rutten, TCS 221, 1999. Moss, ``Coalgebraic logic,'' APAL 96, 1999. Moggi, LICS 1989 / Inf.\ \& Comput.\ 93, 1991. Plotkin--Power, FoSSaCS 2002; Plotkin--Pretnar, ESOP 2009. Baez--Stay, ``Rosetta Stone,'' LNP 813, 2011 (arXiv:0903.0340). Joyal--Street, Adv.\ Math.\ 88, 1991. Fong, \emph{Algebra of Open and Interconnected Systems}, DPhil 2016; Baez--Courser, decorated cospans. Riley, ``Categorical optics,'' 2018; Clarke et al., Compositionality 6(1), 2024; Boisseau--Gibbons, ICFP 2018. Ghani--Hedges--Winschel--Zahn, LICS 2018; Capucci--Gavranovi\'c--Hedges--Rischel, arXiv:2105.06332. Niu--Spivak, \emph{Polynomial Functors}, CUP 2025 (arXiv:2312.00990). Myers, \emph{Categorical Systems Theory}; EPTCS 333, 2021. Girard, ``Linear logic,'' TCS 50, 1987. Caires--Pfenning, CONCUR 2010; Wadler, ICFP 2012 / JFP 24, 2014. Smithe, arXiv:2212.12538, 2109.04461. Hughes, Sci.\ Comput.\ Program.\ 37, 2000. Atkey, ENTCS 229(5), 2011; Jacobs--Heunen--Hasuo, JFP 19, 2009. Spivak, ``operad of wiring diagrams''; ``Functorial Data Migration,'' Inf.\ \& Comput.\ 217, 2012. Abramsky--Coecke, LICS 2004; Coecke--Duncan (ZX), NJP 13, 2011. Lewin, \emph{Generalized Musical Intervals and Transformations}, Yale 1987; Crans--Fiore--Satyendra (PLR/T-I duality), Amer.\ Math.\ Monthly 116, 2009; Mazzola, \emph{The Topos of Music}, 2002. Green--Karvounarakis--Tannen (provenance semirings), PODS 2007. Krohn--Rhodes, Trans.\ AMS 116, 1965; Margolis--Rhodes--Schilling, arXiv:2406.18477, 2024. Bronstein--Bruna--Cohen--Veli\v{c}kovi\'c, arXiv:2104.13478, 2021. Connes--Kreimer, CMP 199, 1998 (\& 210, 2000; 216, 2001). Aguiar--Mahajan, \emph{Monoidal Functors, Species and Hopf Algebras}, AMS 2010. Abramsky--Brandenburger, NJP 13, 2011. Atiyah, ``TQFT,'' IHES 1988; Segal.
+}
+
+\end{document}

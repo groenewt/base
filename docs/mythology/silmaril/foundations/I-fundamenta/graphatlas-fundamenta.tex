@@ -1,0 +1,223 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[latin,english]{babel}
+\usepackage{mathpazo}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{tikz-cd}
+\usepackage[margin=1.2in]{geometry}
+\usepackage{xcolor}
+\definecolor{silmaril}{RGB}{28,60,92}
+\usepackage[colorlinks=true,linkcolor=silmaril,citecolor=silmaril]{hyperref}
+\usepackage{enumitem}
+
+\theoremstyle{plain}
+\newtheorem{theorema}{Theorema}
+\newtheorem{lemma}[theorema]{Lemma}
+\newtheorem{corollarium}[theorema]{Corollarium}
+\theoremstyle{definition}
+\newtheorem{definitio}[theorema]{Definitio}
+\theoremstyle{remark}
+\newtheorem{scholium}[theorema]{Scholium}
+\newtheorem*{consectarium}{Consectarium Ontologicum}
+
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\Set}{\mathbf{Set}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\Nat}{\operatorname{Nat}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\yon}{\text{\usefont{U}{min}{m}{n}\symbol{'110}}} % fallback if no yoneda glyph
+\renewcommand{\yon}{h}
+
+\title{\color{silmaril}\textbf{Fundamenta Mathematica GraphAtlas}\\[0.5ex]
+\large De Lemmate Yonedae et Theoremate Lambekii\\
+\normalsize Silmaril Foundations Series}
+\author{GraphAtlas / Silmaril}
+\date{MMXXVI}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent Duo theoremata fundamentalia demonstramus quae architecturam GraphAtlas necessariam (non arbitrariam) reddunt. \emph{Primum:} lemma Yonedae, ex quo sequitur identitatem cuiusque obiecti in totalitate morphismorum eius contineri --- fundamentum ontologiae relationalis. \emph{Secundum:} theorema Lambekii, ex quo sequitur classem fundamentalem $X \cong F(X)$ non electionem architecti sed necessitatem categoricam esse. Consectaria ontologica pro systematibus graphorum cognitionis explicantur.
+\end{abstract}
+
+\tableofcontents
+
+\section{Praeliminaria}
+
+\begin{definitio}[Categoria localiter parva]
+Categoria $\C$ \emph{localiter parva} dicitur si pro omnibus obiectis $A, B \in \C$ collectio $\Hom_\C(A,B)$ classis propria non est, sed \emph{copia} (set).
+\end{definitio}
+
+\begin{definitio}[Functor repraesentabilis]
+Pro obiecto $A \in \C$ definimus functorem contravariantem
+\[
+h_A := \Hom_\C(-, A) \colon \C^{\op} \longrightarrow \Set,
+\]
+qui obiecto $B$ copiam $\Hom_\C(B,A)$ assignat, et morphismo $g\colon B' \to B$ functionem $(- \circ g)\colon \Hom_\C(B,A) \to \Hom_\C(B',A)$. Functor $F\colon \C^{\op} \to \Set$ \emph{repraesentabilis} dicitur si $F \cong h_A$ pro aliquo $A$.
+\end{definitio}
+
+\begin{definitio}[Transformatio naturalis]
+Datis functoribus $F, G\colon \C^{\op} \to \Set$, transformatio naturalis $\eta\colon F \Rightarrow G$ est familia functionum $(\eta_B\colon F(B) \to G(B))_{B \in \C}$ talis ut pro omni $g\colon B' \to B$ quadratum commutet:
+\[
+\begin{tikzcd}
+F(B) \arrow[r, "\eta_B"] \arrow[d, "F(g)"'] & G(B) \arrow[d, "G(g)"] \\
+F(B') \arrow[r, "\eta_{B'}"'] & G(B')
+\end{tikzcd}
+\]
+Copiam omnium transformationum naturalium $\Nat(F,G)$ scribimus.
+\end{definitio}
+
+\section{Lemma Yonedae}
+
+\begin{lemma}[Yoneda]\label{thm:yoneda}
+Sit $\C$ categoria localiter parva, $A \in \C$ obiectum, $F\colon \C^{\op} \to \Set$ functor quilibet. Tunc functio
+\[
+\Phi\colon \Nat(h_A, F) \longrightarrow F(A), \qquad \Phi(\eta) := \eta_A(\id_A)
+\]
+bijectio est, et naturalis in utroque argumento $A$ et $F$.
+\end{lemma}
+
+\begin{proof}
+\textbf{(i) Constructio inversae.} Dato elemento $x \in F(A)$, definimus $\Psi(x)\colon h_A \Rightarrow F$ per componentes
+\[
+\Psi(x)_B\colon \Hom(B,A) \to F(B), \qquad f \mapsto F(f)(x).
+\]
+Naturalitas verificanda est: pro $g\colon B' \to B$ et $f \in \Hom(B,A)$,
+\[
+\Psi(x)_{B'}\bigl(h_A(g)(f)\bigr) = \Psi(x)_{B'}(f \circ g) = F(f \circ g)(x) = F(g)\bigl(F(f)(x)\bigr) = F(g)\bigl(\Psi(x)_B(f)\bigr),
+\]
+ubi aequalitas tertia ex functorialitate contravariante $F(f \circ g) = F(g) \circ F(f)$ sequitur. Ergo quadratum naturalitatis commutat.
+
+\textbf{(ii) $\Phi \circ \Psi = \id_{F(A)}$.} Directe computamus:
+\[
+\Phi(\Psi(x)) = \Psi(x)_A(\id_A) = F(\id_A)(x) = \id_{F(A)}(x) = x.
+\]
+
+\textbf{(iii) $\Psi \circ \Phi = \id_{\Nat(h_A,F)}$.} Sit $\eta\colon h_A \Rightarrow F$ quaelibet, $B \in \C$, $f\colon B \to A$. Quadratum naturalitatis circa $f$ (visum ut morphismus in $\C^{\op}$) dat:
+\[
+\begin{tikzcd}[column sep=large]
+\Hom(A,A) \arrow[r, "\eta_A"] \arrow[d, "-\circ f"'] & F(A) \arrow[d, "F(f)"] \\
+\Hom(B,A) \arrow[r, "\eta_B"'] & F(B)
+\end{tikzcd}
+\]
+Sequendo elementum $\id_A$ per duas vias:
+\[
+\eta_B(\id_A \circ f) = \eta_B(f) \quad\text{et}\quad F(f)\bigl(\eta_A(\id_A)\bigr) = \Psi\bigl(\Phi(\eta)\bigr)_B(f).
+\]
+Commutativitas cogit $\eta_B(f) = \Psi(\Phi(\eta))_B(f)$ pro omnibus $B, f$; ergo $\eta = \Psi(\Phi(\eta))$.
+
+Tota transformatio naturalis ex sola imagine identitatis $\eta_A(\id_A)$ determinatur --- \emph{unum punctum totum determinat}.
+\end{proof}
+
+\begin{corollarium}[Immersio Yonedae plene fidelis]\label{cor:embedding}
+Functor
+\[
+\yon\colon \C \longrightarrow [\C^{\op}, \Set], \qquad A \mapsto h_A
+\]
+plene fidelis est. Praeterea:
+\[
+A \cong B \quad\Longleftrightarrow\quad h_A \cong h_B.
+\]
+\end{corollarium}
+
+\begin{proof}
+Applicando Lemma~\ref{thm:yoneda} cum $F = h_B$:
+\[
+\Nat(h_A, h_B) \cong h_B(A) = \Hom_\C(A, B).
+\]
+Bijectio haec ipsa actio functoris $\yon$ in morphismis est (verificatio directa: morphismo $u\colon A \to B$ correspondet transformatio $(- \mapsto u \circ -)$, cuius imago sub $\Phi$ est $u \circ \id_A = u$). Ergo $\yon$ plenus (surjectivus in Hom) et fidelis (injectivus in Hom) est.
+
+Pro aequivalentia: si $A \cong B$ tunc $h_A \cong h_B$ per functorialitatem. Vicissim, si $\theta\colon h_A \xrightarrow{\;\sim\;} h_B$ isomorphismus naturalis, tunc per plenitudinem $\theta = \yon(u)$ et $\theta^{-1} = \yon(v)$ pro quibusdam $u\colon A \to B$, $v\colon B \to A$; per fidelitatem $v \circ u = \id_A$ et $u \circ v = \id_B$, ergo $A \cong B$.
+\end{proof}
+
+\begin{consectarium}
+Corollarium~\ref{cor:embedding} dicit: \emph{identitas obiecti nihil aliud est quam totalitas morphismorum eius}. Obiectum $A$ usque ad isomorphismum unicum a functore $h_A$ --- id est, ab omnibus relationibus quas cum ceteris obiectis habet --- determinatur. Nulla ``substantia occulta'' ultra relationes existit quae identitatem distinguere possit.
+
+Pro GraphAtlas hoc fundamentum est, non ornamentum:
+\begin{enumerate}[label=(\alph*)]
+\item \textbf{Nodus = vicinitas morphismorum.} In grapho cognitionis, nodus per arcus suos, relationes suas, contextum suum \emph{constituitur}. Quaerere ``quid nodus \emph{re vera} sit'' praeter relationes eius est error metaphysicus (error substantiae).
+\item \textbf{Inspectabilitas = completudo.} Quia identitas in morphismis visibilibus tota continetur, systema quod omnes morphismos exponit \emph{nihil celat}. Systema opacum quod essentiam ultra relationes inspectabiles affirmat vel errat vel mentitur.
+\item \textbf{Reproducibilitas Yonedae.} Duo systemata quae easdem relationes exponunt eadem obiecta repraesentant --- foederatio (Hanseatica) ergo possibilis est sine auctoritate centrali quae ``veram identitatem'' custodiat.
+\end{enumerate}
+\end{consectarium}
+
+\section{Theorema Lambekii}
+
+\begin{definitio}[Algebra endofunctoris]
+Sit $F\colon \C \to \C$ endofunctor. \emph{$F$-algebra} est par $(X, \alpha)$ ubi $X \in \C$ et $\alpha\colon F(X) \to X$ morphismus. Morphismus algebrarum $(X,\alpha) \to (Y,\beta)$ est $\varphi\colon X \to Y$ talis ut
+\[
+\begin{tikzcd}
+F(X) \arrow[r, "F(\varphi)"] \arrow[d, "\alpha"'] & F(Y) \arrow[d, "\beta"] \\
+X \arrow[r, "\varphi"'] & Y
+\end{tikzcd}
+\]
+commutet. Algebra \emph{initialis} est obiectum initiale in categoria $F\text{-}\mathbf{Alg}$: ex ea ad quamlibet algebram unicus morphismus exit.
+\end{definitio}
+
+\begin{theorema}[Lambek, 1968]\label{thm:lambek}
+Si $(X, \alpha\colon F(X) \to X)$ algebra initialis endofunctoris $F$ est, tunc $\alpha$ isomorphismus est:
+\[
+X \cong F(X).
+\]
+\end{theorema}
+
+\begin{proof}
+Observamus par $(F(X), F(\alpha))$ etiam $F$-algebram esse, nam $F(\alpha)\colon F(F(X)) \to F(X)$.
+
+\textbf{(i)} Per initialitatem $(X,\alpha)$ existit unicus morphismus algebrarum $i\colon (X,\alpha) \to (F(X), F(\alpha))$, id est quadratum sinistrum commutat:
+\[
+\begin{tikzcd}[column sep=large]
+F(X) \arrow[r, "F(i)"] \arrow[d, "\alpha"'] & F(F(X)) \arrow[r, "F(\alpha)"] \arrow[d, "F(\alpha)"] & F(X) \arrow[d, "\alpha"] \\
+X \arrow[r, "i"'] & F(X) \arrow[r, "\alpha"'] & X
+\end{tikzcd}
+\qquad
+i \circ \alpha = F(\alpha) \circ F(i).
+\]
+
+\textbf{(ii)} Quadratum dextrum trivialiter commutat ($\alpha \circ F(\alpha) = \alpha \circ F(\alpha)$), ergo $\alpha$ ipse morphismus algebrarum $(F(X), F(\alpha)) \to (X, \alpha)$ est. Compositio
+\[
+\alpha \circ i\colon (X, \alpha) \longrightarrow (X, \alpha)
+\]
+endomorphismus algebrae initialis est. Sed ex algebra initiali ad se ipsam unicus morphismus exit, qui $\id_X$ esse debet (nam $\id_X$ morphismus algebrarum est). Ergo
+\[
+\alpha \circ i = \id_X.
+\]
+
+\textbf{(iii)} Pro altera compositione, ex commutativitate quadrati sinistri et functorialitate:
+\[
+i \circ \alpha = F(\alpha) \circ F(i) = F(\alpha \circ i) = F(\id_X) = \id_{F(X)}.
+\]
+
+Ergo $i = \alpha^{-1}$ et $\alpha\colon F(X) \xrightarrow{\;\sim\;} X$ isomorphismus est.
+\end{proof}
+
+\begin{corollarium}[Necessitas puncti fixi]\label{cor:fixpoint}
+Obiectum initiale in $F\text{-}\mathbf{Alg}$, si existit, punctum fixum minimum functoris $F$ est: $X \cong F(X)$, et ad quodlibet aliud punctum fixum unicus morphismus canonicus exit.
+\end{corollarium}
+
+\begin{scholium}[De classe fundamentali Silmaril]
+Classis fundamentalis Silmaril, quae structuram $X \cong F(X)$ realizat, per Theorema~\ref{thm:lambek} \emph{non electio architecti sed necessitas categorica} est. Quicumque primitivum ontologicum quaerit quod (a) sub constructore structurali $F$ clausum sit et (b) minimale sit (nihil superfluum contineat), ad algebram initialem cogitur --- et Lambek demonstrat hanc algebram necessario punctum fixum esse.
+
+Structura plena bialgebraica (Turi--Plotkin) hoc superaddit: algebra initialis $\Sigma$-structurae (syntaxis) cum coalgebra terminali $B$-structurae (semantica, observatio) per legem distributivam abstractam GSOS $\lambda\colon \Sigma(B \times \id) \Rightarrow B\Sigma^{*}$ copulatur. Ex hoc omnia constructa systematis proiectiones coactae sunt: syntaxis inducta, semantica coinducta, congruentia bisimulationis gratis obtinetur.
+\end{scholium}
+
+\begin{consectarium}
+Duo theoremata simul unum argumentum constituunt:
+\begin{itemize}
+\item \textbf{Yoneda} (Theorema~\ref{thm:yoneda}) dicit \emph{quid obiectum sit}: totalitas morphismorum. Ontologia relationalis, non substantialis.
+\item \textbf{Lambek} (Theorema~\ref{thm:lambek}) dicit \emph{quomodo primitivum construatur}: punctum fixum initiale, forma necessaria non arbitraria.
+\end{itemize}
+GraphAtlas ergo non systema est quod philosophiam ``habet'' --- systema est cuius architectura ex theorematibus \emph{sequitur}. Contra-thesis ad systemata opaca hic mathematica fit: quod celatur aut in morphismis visibilibus iam continetur (Yoneda), aut non ad identitatem pertinet. \emph{Quod inspici potest, omne est.}
+\end{consectarium}
+
+\vspace{2em}
+\begin{center}
+\color{silmaril}\rule{0.3\textwidth}{0.4pt}\\[0.5em]
+\textsc{q.e.d. --- et quod erat construendum}
+\end{center}
+
+\end{document}

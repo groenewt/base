@@ -16,3 +16,6 @@
 [submodule "forge/bin"]
 	path = forge/bin
 	url = https://github.com/groenewt/base_bin
+[submodule "forge/specs"]
+	path = forge/specs
+	url = https://github.com/groenewt/base_aobs
