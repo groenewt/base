@@ -7,3 +7,6 @@
 [submodule "forge/templates"]
 	path = forge/templates
 	url = https://github.com/groenewt/base_templates
+[submodule "forge/sbin"]
+	path = forge/sbin
+	url = https://github.com/groenewt/base_bin
